@@ -77,7 +77,9 @@ function getLanguageScopeName(languageId) {
             return matchingLanguages[0].scopeName;
         }
     }
-    catch (err) { }
+    catch (err) {
+        console.log("HyperScopes: Unable to get language scope name", err);
+    }
     return undefined;
 }
 
@@ -85,7 +87,7 @@ function getLanguageScopeName(languageId) {
 /**
  * DOCUMENT CONTROLLER IMPORT 
  */
-const { DocumentController } = require("./document-controller")
+const { DocumentController  } = require("./document-controller")
 let documentsMap = new Map();
 /**
  * @param {vscode.TextDocument} document 
@@ -104,7 +106,9 @@ async function openDocument(document) {
             }
         }
     }
-    catch (err) { }
+    catch (err) {
+        console.log("HyperScopes: Unable to load document controller",err);
+    }
 }
 function reloadDocuments(){
     unloadDocuments();
@@ -134,16 +138,16 @@ function unloadDocuments() {
  * @param {vscode.ExtensionContext} context
  */
 function activate(context) {
-	console.log('Congratulations, your extension "hscopes-booster" is now active!');
     context.subscriptions.push(vscode.workspace.onDidOpenTextDocument(openDocument));
     context.subscriptions.push(vscode.workspace.onDidCloseTextDocument(closeDocument));
 	reloadGrammar();
     reloadDocuments();
+    /** EXPORT API */
     const api = {
         /**
          * @param {vscode.TextDocument} document
-            * @param {vscode.Position} position
-            */
+         * @param {vscode.Position} position
+         */
         getScopeAt(document, position) {
             try {
                 const thisDocController = documentsMap.get(document.uri);
@@ -151,20 +155,16 @@ function activate(context) {
                     return thisDocController.getScopeAt(position);
                 }
             }
-            catch (err) { console.error("Cannot get Scope at position", position, "\n",err); }
+            catch (err) { console.error("HyperScopes: Unable to get Scope at position: ", position, "\n",err); }
             return null;
         },
     }
     return api;
 }
 
-
-
-
 function deactivate() {unloadDocuments()}
 
 module.exports = {
 	activate,
-	deactivate,
-	registry,
+	deactivate
 }
