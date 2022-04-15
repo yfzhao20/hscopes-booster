@@ -112,8 +112,7 @@ async function openDocument(document) {
 }
 function reloadDocuments(){
     unloadDocuments();
-    for (const document of vscode.workspace.textDocuments)
-        openDocument(document);
+    vscode.workspace.textDocuments.forEach((doc) => openDocument(doc))
 }
 /**
  * @param {vscode.TextDocument} document 
@@ -140,6 +139,7 @@ function unloadDocuments() {
 function activate(context) {
     context.subscriptions.push(vscode.workspace.onDidOpenTextDocument(openDocument));
     context.subscriptions.push(vscode.workspace.onDidCloseTextDocument(closeDocument));
+    context.subscriptions.push(vscode.commands.registerCommand('hscopes-booster.reload', reloadDocuments))
 	reloadGrammar();
     reloadDocuments();
     /** EXPORT API */

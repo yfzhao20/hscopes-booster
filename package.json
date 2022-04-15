@@ -2,7 +2,7 @@
   "name": "hscopes-booster",
   "displayName": "HyperScopes Booster",
   "description": "Supplies an API for querying TextMate scope information.",
-  "version": "0.0.2",
+  "version": "0.0.5",
   "engines": {
     "vscode": "^1.54.0"
   },
@@ -18,6 +18,14 @@
   },
   "bugs": {
     "url": "https://github.com/yfzhao20/hscopes-booster/issues"
+  },
+  "contributes": {
+    "commands":[
+      {
+        "command": "hscopes-booster.reload",
+        "title": "HyperScopes-Booster: Reload Document Tokens"
+      }
+    ]
   },
   "icon": "images/icon.ico",
   "publisher": "yfzhao",
